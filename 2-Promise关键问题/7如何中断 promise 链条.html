@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>如何中断Promise链条</title>
+</head>
+
+<body>
+    <script>
+        let p = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve('ok');
+            }, 1000);
+        })
+
+        p.then(value => {
+            console.log(111);
+            // 有且只有这一种办法
+            // return 一个 状态为pedding的 promise 对象
+            return new Promise(() => { });
+        }).then(value => {
+            console.log(222);
+        }).then(value => {
+            console.log(333);
+        }).catch((reason) => {
+            console.warn(reason);
+        })
+        // 如果是抛出异常 和 执行reject()函数 是会执行catch回调函数，并不能中断promise链条。
+        // 只有 return 一个 处于pendding状态的 promise 才会中断
+    </script>
+</body>
+
+</html>

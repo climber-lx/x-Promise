@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>异常穿透</title>
+</head>
+
+<body>
+    <script>
+        let p = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve('ok');
+                // reject('eror');
+            }, 1000);
+        })
+
+        p.then(value => {
+            console.log(111);
+            throw '失败啊'
+        }).then(value => {
+            console.log(222);
+        }).then(value => {
+            console.log(333);
+        }).catch((reason) => {
+            console.warn(reason);
+        })
+
+        // 只要出错就会执行 catch 方法，所以一般只要在末尾指定失败的回调即可，中间有错也会执行。即为穿透
+    </script>
+</body>
+
+</html>

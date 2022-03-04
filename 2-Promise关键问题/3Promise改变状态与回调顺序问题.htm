@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>改变 promise 状态和指定回调函数谁先谁后</title>
+</head>
+
+<body>
+    <script>
+        // 改变 promise 状态和指定回调函数谁先谁后
+        // 指定回调函数即为声明回调函数
+        // 如果 执行器 函数中如同步操作，则先改变状态，在指定回调函数，在指定回调函数
+        // 如果 执行器 函数中是异步操作，则先指定回调函数【为同步操作】，等状态改变时，在执行回调函数。
+        let p = new Promise((resolve, reject) => {
+            console.log(444);
+            setTimeout(() => {
+                resolve('ok')
+            }, 0);
+        })
+        console.log(111);
+        setTimeout(() => {
+            console.log(555);
+            setTimeout(() => {
+                console.log(`5555-setTimeout`)
+            }, 0);
+            p.then(() => { console.log(`5555-then`) });
+        }, 0);
+        p.then((value) => {
+            console.log(222);
+            setTimeout(() => {
+                console.log(`222-setTimeout`)
+            }, 0);
+            p.then(() => { console.log(`222-then`) });
+        }, (reason) => {
+
+        })
+        setTimeout(() => {
+            console.log(666);
+        }, 0);
+        console.log(333);
+
+        // 输出顺序为 444 111 333 222  555 666
+        // 分析：执行器函数是同步操作，更改状态时异步操作，所以先指定回调函数，等状态状态，在执行回调函数。
+        // 整体结果分析:
+        // 执行顺序： 先执行同步操作 -->  在执行异步的微任务  --> 异步的宏任务 --> 微任务  --> 宏任务
+    </script>
+</body>
+
+</html>
