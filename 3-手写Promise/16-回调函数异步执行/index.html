@@ -5,23 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>all</title>
+    <title>回调函数异步执行</title>
     <script src="./promise.js"></script>
 </head>
 
 <body>
     <script>
         let p = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve('ok')
-            }, 1000);
+            resolve('ok')
         })
-        let p2 = Promise.resolve('success');
-        let p3 = Promise.resolve('On Yeah');
-
-        let result = Promise.all([p, p2, p3]);
-        console.log(result);
-
+        p.then(value => {
+            console.log(222);
+        })
+        console.log(333);
     </script>
 </body>
 

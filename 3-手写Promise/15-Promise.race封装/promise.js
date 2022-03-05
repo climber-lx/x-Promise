@@ -150,3 +150,16 @@ Promise.all = function (promises) {
         }
     })
 }
+
+// 添加 race 方法
+Promise.race = function (promises) {
+    return new Promise((resolve, reject) => {
+        for (let i = 0; i < promises.length; i++) {
+            promises[i].then(v => {
+                resolve(v);
+            }, r => {
+                reject(r)
+            })
+        }
+    })
+}
